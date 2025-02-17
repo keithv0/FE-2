@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Notes App</title>
 
-    <link rel="stylesheet" href="src/style/style.css">
+    <link rel="stylesheet" href="src/style/style.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" />
 </head>
 
 <body>
@@ -21,12 +21,29 @@
     </header>
 
     <main>
+        <!-- Associate with notes -->
+        <div class="container-top">
+            <div class="create-note">
+                <h2>Buat Catatan</h2>
+                <form action="" class="form-create">
+                    <create-note></create-note>
+                </form>
+            </div>
+
+            <div class="search-note">
+                <h2>Cari Catatan</h2>
+                <input-app></input-app>
+            </div>
+        </div>
+
         <!-- Card -->
+        <h2 class="title-note">Catatan</h2>
         <card-list></card-list>
+        <h2 class="title-note">Archive</h2>
     </main>
 
     <footer>
-        <footer-bar></footer-bar>
+        <footer-bar text="Notes App &copy;2025"></footer-bar>
     </footer>
 
     <script type="module" src="/src/app.js"></script>

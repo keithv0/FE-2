@@ -4,13 +4,21 @@ class FooterBar extends HTMLElement {
         super();
         this.attachShadow({ mode:'open'})
     }
+    static get observedAttribute() {
+        return ['text']
+    }
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'text'){
+            this.render()
+        }
+    }
     connectedCallback() {
         this.render()
     }
     render() {
-        const footerHtml = document.createElement('template');
+        const text = this.getAttribute('text') || 'Notes App @2025'
 
-        footerHtml.innerHTML = `
+        this.shadowRoot.innerHTML = `
         <style>
             :host{
                 display: block;
@@ -18,15 +26,14 @@ class FooterBar extends HTMLElement {
                 text-align: center;
                 color: white;
                 }
-                .cekcek{
+                .container-footer{
                 padding: 20px;            
             }
         </style>
-        <div class="cekcek">
-            <i>Notes App &copy;2025</i>
+        <div class="container-footer">
+            <i>${text}</i>
         </div>
         `;
-        this.shadowRoot.appendChild(footerHtml.content.cloneNode(true))
     }
 
 }
