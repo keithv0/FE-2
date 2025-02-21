@@ -31,7 +31,14 @@ class InputApp extends HTMLElement {
         `;
     }
     setUpEventListener() {
-        this.shadowRoot.querySelector("#title-note").addEventListener('input', this.countNumber.bind(this))
+        this.shadowRoot.querySelector("#title-note").addEventListener('input', (event) =>{
+            this.countNumber()
+            const keyword = event.target.value.toLowerCase();
+            document.dispatchEvent(new CustomEvent("note-search", {
+                detail: {keyword}
+            }))
+        } 
+    )
     }
     countNumber() {
         const judulInput = this.shadowRoot.querySelector('#title-note')

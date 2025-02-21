@@ -1,4 +1,4 @@
-import dataList from "../data/data-note.js";
+import {getNotes} from "../data/data-note.js";
 
 class noteList extends HTMLElement {
     constructor() {
@@ -7,20 +7,22 @@ class noteList extends HTMLElement {
     }
     connectedCallback() {
         this.render();
+        document.addEventListener('note-added', ()=> this.render())
     }
 
     render() {
-        let notesHtml = "";
-        dataList.map((note) => {
-            notesHtml += `
+        const notes = getNotes()
+        console.log("cek di note-list", notes)
+
+        const notesHtml  = notes.map((note) => {
+            `
                 <div class="note">
                     <h2>${note.title}</h2>
                     <h5>${note.body}</h5>
-                    <p>${note.createdAt}</p>
+                    <small>${new Date(note.createdAt).toLocaleString()}</small>
                 </div>
-
-    `;
-        });
+            `;
+        }). join('');
 
         this.shadowRoot.innerHTML = `
             <style>

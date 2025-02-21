@@ -106,12 +106,14 @@ const notesData = [
     },
 ];
 
-// class NotesData {
-//     static getAll() {
-//         return NotesData
-//     }
+export function addNotes(note) {
+  notesData.push(note)
+  localStorage.setItem("notesData",JSON.stringify())
+}
+export function getNotes() {
+  const storedNotes = localStorage.getItem("notesData")
+  return storedNotes ? JSON.parse(storedNotes) : notesData
+}
 
-
-// }
-console.log(notesData);
+console.log('debug in data-note.js, cek data:',notesData);
 export default notesData
