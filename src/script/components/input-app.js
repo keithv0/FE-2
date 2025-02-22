@@ -31,9 +31,9 @@ class InputApp extends HTMLElement {
         `;
     }
     setUpEventListener() {
-        this.shadowRoot.querySelector("#title-note").addEventListener("input", this.countNumber.bind(this))
+    this.shadowRoot.querySelector('#title-note').addEventListener('input', this.countNumber.bind(this))
     }
-
+    
     countNumber() {
         const judulInput = this.shadowRoot.querySelector('#title-note')
         const nomorChar = this.shadowRoot.querySelector('#span-counter')

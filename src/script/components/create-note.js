@@ -9,7 +9,6 @@ class CreateNote extends HTMLElement{
     connectedCallback() {
         this.render();
         this.setupEventListeners()
-        // document.addEventListener("note-added", () => this.render()) 
     }
     render() {
         console.log('render dipanggil')
