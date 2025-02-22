@@ -9,6 +9,7 @@ class CreateNote extends HTMLElement{
     connectedCallback() {
         this.render();
         this.setupEventListeners()
+        // document.addEventListener("note-added", () => this.render()) 
     }
     render() {
         console.log('render dipanggil')
@@ -77,7 +78,6 @@ class CreateNote extends HTMLElement{
 
         // add note
         addNotes(newNote)
-        // localStorage.setItem("notesData",JSON.stringify(addNotes))
 
         console.log('Data notes setelah ditambahkan:', getNotes())
 
@@ -86,7 +86,7 @@ class CreateNote extends HTMLElement{
         noteTextarea.value = '';
         
         
-        this.dispatchEvent(new CustomEvent('note-added', {
+        document.dispatchEvent(new CustomEvent('note-added', {
             detail: newNote,
             bubbles: true,
             composed: true

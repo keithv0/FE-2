@@ -5,3 +5,4 @@ import './footer-app.js'
 import './create-note.js'
 
 import './input-app.js'
+import './search-app.js'

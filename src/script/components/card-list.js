@@ -10,6 +10,7 @@ class CardList extends HTMLElement {
     connectedCallback() {
         this.render()
         document.addEventListener('note-updated', () => this.render())
+        document.addEventListener('note-added', () => this.render())
         document.addEventListener('note-search', (event) => {
             
             this.keyword = event.detail.keyword;
@@ -86,7 +87,9 @@ class CardList extends HTMLElement {
             </style>
             ${notesHtml}
         `;
-        this.handleButton()
+        if (filterNote.length > 0 ) {
+            this.handleButton()
+        }
     }
     handleButton() {
         // maping status
@@ -135,6 +138,10 @@ class CardList extends HTMLElement {
         })
     }
     saveToLocal(data) {
+        if(!Array.isArray(data)) {
+            console.warn("gagal menyimpan data (bukan array)", data);
+            return;
+        }
         localStorage.setItem("notesData",JSON.stringify(data))
     }
     

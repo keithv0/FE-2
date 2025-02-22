@@ -107,12 +107,26 @@ const notesData = [
 ];
 
 export function addNotes(note) {
-  notesData.push(note)
-  localStorage.setItem("notesData",JSON.stringify())
+  const notes = getNotes()
+  notes.push(note)
+  localStorage.setItem("notesData",JSON.stringify(notes))
+  // document.dispatchEvent(new CustomEvent("note-added"))
 }
 export function getNotes() {
   const storedNotes = localStorage.getItem("notesData")
-  return storedNotes ? JSON.parse(storedNotes) : notesData
+  
+  if (!storedNotes) {
+    console.warn("Local storage tidak valid");
+    return notesData;
+  }
+
+  try {
+    return JSON.parse(storedNotes);
+  } catch (err) {
+    console.warn("Data di local storage tidak valid", err)
+    localStorage.setItem("notesData", JSON.stringify(notesData));
+    return notesData
+  }
 }
 
 console.log('debug in data-note.js, cek data:',notesData);
