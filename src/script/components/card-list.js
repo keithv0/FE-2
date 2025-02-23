@@ -38,24 +38,24 @@ class CardList extends HTMLElement {
             filterNote.forEach((notes) => {
                 notesHtml += `
                 <div class="note">
-                <h2 class="note-title">${notes.title.substring(0,13)}...</h2>
-                <h5 class="note-body">${notes.body.substring(0, 95)}...</h5>
-                <div class="container-button">
-                <button class="button-aktif"></button>
-                <button class="button-archive"></button>
-                </div>
+                    <h2 class="note-title">${notes.title.substring(0,13)}...</h2>
+                    <h5 class="note-body">${notes.body.substring(0, 95)}...</h5>
+                    <div class="container-button">
+                        <button class="button-aktif"></button>
+                        <button class="button-archive"></button>
+                    </div>
                 </div>
                 `;
             });
         }
             this.shadowRoot.innerHTML = `
             <style>
-                :host{
+
+            :host{
                 padding: 20px;
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
                 gap: 10px;
-                // border: 1px solid whitesmoke; 
             }
             .note {
                 color: aliceblue;
@@ -65,24 +65,34 @@ class CardList extends HTMLElement {
                 line-height: 1.6rem;
                 
             }
-            .note-title{
-                // border: 1px solid red;          
-            }
-            .note-body{
-                // border: 1px solid red;
-                }
-            .container-button{
-                border: 1px solid red;
-                display: flex;
-                align-items: end;
-            }
             button{
                 width: 100%;
                 background-color: transparent;
                 color: white;
                 border: 1px solid white;
                 cursor: pointer;
+                padding: 5px;
+                border-radius: 5px;
             }
+            .not-found-data{
+                border:1px solid white;
+                width: 100%;
+            }
+            @media only screen and (max-width:1300px) {
+                :host{
+                    grid-template-columns: repeat(3, 1fr)
+                }
+            }
+                @media only screen and (max-width:1024px) {
+                    :host{
+                        grid-template-columns: repeat(2, 1fr)
+                    }
+                }
+                @media only screen and (max-width:480px) {
+                    :host{
+                        grid-template-columns: 1fr;
+                    }
+                }
             </style>
             ${notesHtml}
         `;
