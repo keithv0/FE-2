@@ -1,5 +1,4 @@
-import { getNotes, addNotes } from "../data/data-note.js";
-
+import { createNote } from "../data/remote/notes-api.js";
 
 class CreateNote extends HTMLElement{
     constructor() {
@@ -76,26 +75,26 @@ class CreateNote extends HTMLElement{
         }
 
         // add note
-        addNotes(newNote)
+        if(title && body) {
+            createNote(newNote.title, newNote.body)
+        } else {
+            alert("Judul dan Body Harus Terisi");
+        }
 
-        console.log('Data notes setelah ditambahkan:', getNotes())
+        console.log('Data notes setelah ditambahkan:', createNote())
 
         // reset
         titleField.value = '';
         noteTextarea.value = '';
-        
         
         document.dispatchEvent(new CustomEvent('note-added', {
             detail: newNote,
             bubbles: true,
             composed: true
         }))
-        
+    
     }
-    
-    
+        
 }
 
-
-export default addNotes
 customElements.define('create-note', CreateNote)

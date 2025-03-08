@@ -1,5 +1,5 @@
-import notesData from "../data/data-note.js";
 import { getNotes } from "../data/data-note.js";
+import { getDataNonArchive, getDataArchive, createNote, archiveNote, unArchiveNote, deleteNote } from "../data/remote/notes-api.js";
 
 class CardList extends HTMLElement {
     constructor() {
@@ -7,21 +7,20 @@ class CardList extends HTMLElement {
         this.attachShadow({ mode:'open' })
         this.keyword = "";
     }
-    connectedCallback() {
-        this.render()
-        document.addEventListener('note-updated', () => this.render())
-        document.addEventListener('note-added', () => this.render())
+    async connectedCallback() {
+        await this.fetchNotes()
+        document.addEventListener('note-updated', () => this.fetchNotes())
+        document.addEventListener('note-added', () => this.fetchNotes())
         document.addEventListener('note-search', (event) => {
             this.keyword = event.detail.keyword;
             this.render()
         })
     }
 
-    render() {
-        const getNotesData = getNotes()
+    async render() {
+
         const isArchive = this.getAttribute("data-archive") === "true";
-        
-        let filterNote = getNotesData.filter(note => note.archived === isArchive)
+        let filterNote = this.notes.filter(note => note.archived === isArchive)
 
         if(this.keyword) {
             filterNote = filterNote.filter(note => 
@@ -41,8 +40,10 @@ class CardList extends HTMLElement {
                     <h2 class="note-title">${notes.title.substring(0,13)}...</h2>
                     <h5 class="note-body">${notes.body.substring(0, 95)}...</h5>
                     <div class="container-button">
-                        <button class="button-aktif"></button>
-                        <button class="button-archive"></button>
+                        <button class="btn-archive">
+                            ${notes.archived ? "Unarchive" : "Archive"}
+                        </button>
+                        <button class="btn-delete">Delete</button>
                     </div>
                 </div>
                 `;
@@ -100,57 +101,45 @@ class CardList extends HTMLElement {
             ${notesHtml}
         `;
         if (filterNote.length > 0 ) {
-            this.handleButton()
+            this.handleButton(filterNote)
         }
     }
-    handleButton() {
-        // maping status
-        const getNotesData = getNotes()
+    handleButton(filterNote) {
+
+        // Edit Button
+        const btnArchive = this.shadowRoot.querySelectorAll('.btn-archive');
+        const btnDelete = this.shadowRoot.querySelectorAll('.btn-delete');
         const isArchive = this.getAttribute("data-archive") === "true";
-        const filterNote = getNotesData.filter((note) => note.archived === isArchive)
 
-          // ambil element
-          const teksButtonAktif = this.shadowRoot.querySelectorAll('.button-aktif')
-          const teksButtonArchive = this.shadowRoot.querySelectorAll('.button-archive')
+        let noteDelete = null;
 
-          if(teksButtonAktif.length !=filterNote.length || teksButtonArchive.length != filterNote.length) {
-            console.warn("Jumlah button tidak sesuai dengan jumlah data")
-            
-          }
-        filterNote.forEach((note, index) => {
-            // indexing
-            const btnAktif = teksButtonAktif[index]       
-            const btnArchive = teksButtonArchive[index]
+        // Edit Btn Archive/Non
+        btnArchive.forEach((btn, index) => {
+            btn.addEventListener('click', async () => {
+                if(!filterNote[index]) return;
 
-            if (!btnAktif || !btnArchive) return;
-
-            if(!note.archived){
-                btnAktif.innerHTML = "Archive"
-                btnArchive.style.display = "none"
-            } else {
-                btnArchive.innerHTML = "Unarchive"
-                btnAktif.style.display = "none"
-
-            }
-
-            // update teks button
-            btnAktif.addEventListener("click", () => {
-                note.archived = !note.archived;
-                this.saveToLocal(getNotesData);
-                document.dispatchEvent(new CustomEvent("note-updated"))
-            });
-
-            btnArchive.addEventListener("click", () => {
-                note.archived = !note.archived;
-                this.saveToLocal(getNotesData);
-                document.dispatchEvent(new CustomEvent("note-updated"))
+                const noteId = filterNote[index].id;
+                await (isArchive ? unArchiveNote(noteId) : archiveNote(noteId));
+                await this.fetchNotes()
             })
-
-            console.log("cek archive: ", note.archived)
         })
+
+        // Edit Btn Delete
+        btnDelete.forEach((btn, index) => {
+            btn.addEventListener('click', async () => {
+                if(!filterNote[index]) return;
+                
+                noteDelete = filterNote[index].id;
+                await deleteNote(noteDelete);
+                // await this.fetchNotes();
+            })
+        })
+
     }
-    saveToLocal(data) {
-        localStorage.setItem("notesData",JSON.stringify(data))
+
+    async fetchNotes() {
+        this.notes = this.getAttribute("data-archive") === "true" ? await getDataArchive() : await getDataNonArchive();
+        this.render()
     }
     
 
