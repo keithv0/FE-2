@@ -6,6 +6,7 @@ class CardList extends HTMLElement {
         super();
         this.attachShadow({ mode:'open' })
         this.keyword = "";
+        this.isLoading = true;
     }
     async connectedCallback() {
         await this.fetchNotes()
@@ -17,8 +18,27 @@ class CardList extends HTMLElement {
         })
     }
 
-    async render() {
+    async fetchNotes() {
+        this.isLoading = true;
+        this.render()
 
+        this.notes = this.getAttribute("data-archive") === "true" ? await getDataArchive() : await getDataNonArchive();
+
+        this.isLoading = false;
+        this.render()
+    }
+
+    async render() {
+        // Loading Logic
+        const getLoading = document.querySelector('loading-app');
+
+        if(this.isLoading) {
+            getLoading.style.display = "block";
+        } else {
+            getLoading.style.display = "none";
+        }
+
+        // Get Attribute Archive From Html
         const isArchive = this.getAttribute("data-archive") === "true";
         let filterNote = this.notes.filter(note => note.archived === isArchive)
 
@@ -137,10 +157,6 @@ class CardList extends HTMLElement {
 
     }
 
-    async fetchNotes() {
-        this.notes = this.getAttribute("data-archive") === "true" ? await getDataArchive() : await getDataNonArchive();
-        this.render()
-    }
     
 
 }
