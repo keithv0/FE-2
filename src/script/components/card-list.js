@@ -1,5 +1,5 @@
 import { getNotes } from "../data/data-note.js";
-import { getDataNonArchive, getDataArchive, createNote, archiveNote, unArchiveNote, deleteNote } from "../data/remote/notes-api.js";
+import { getDataNonArchive, getDataArchive, archiveNote, unArchiveNote, deleteNote } from "../data/remote/notes-api.js";
 
 class CardList extends HTMLElement {
     constructor() {
@@ -119,12 +119,18 @@ class CardList extends HTMLElement {
                 }
             </style>
             ${notesHtml}
+            <popup-app></popup-app>
         `;
         if (filterNote.length > 0 ) {
             this.handleButton(filterNote)
         }
     }
     handleButton(filterNote) {
+        // Pop Up
+        const getPopup = this.shadowRoot.querySelector('popup-app');
+        const containerModal = getPopup.shadowRoot.querySelector('.container-modal');
+        const cancelBtn = getPopup.shadowRoot.querySelector('.btn-cancel');
+        const confirmBtn = getPopup.shadowRoot.querySelector('.btn-delete');
 
         // Edit Button
         const btnArchive = this.shadowRoot.querySelectorAll('.btn-archive');
@@ -150,14 +156,24 @@ class CardList extends HTMLElement {
                 if(!filterNote[index]) return;
                 
                 noteDelete = filterNote[index].id;
-                await deleteNote(noteDelete);
+                containerModal.style.display = "block";
                 // await this.fetchNotes();
             })
         })
 
-    }
+        // Confirm Btn Popup
+        confirmBtn.addEventListener('click', async () => {
+            if(!noteDelete) return;
+            await deleteNote(noteDelete)
+        })
 
-    
+        // Cancel Btn Popup
+        cancelBtn.addEventListener('click', async () => {
+            containerModal.style.display = "none"
+            noteDelete = null;
+        })
+
+    }  
 
 }
 

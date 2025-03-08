@@ -129,6 +129,3 @@ export function getNotes() {
     return notesData
   }
 }
-
-console.log('debug in data-note.js, cek data:',notesData);
-export default notesData
