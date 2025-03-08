@@ -1,4 +1,3 @@
-import { getNotes } from "../data/data-note.js";
 import { getDataNonArchive, getDataArchive, archiveNote, unArchiveNote, deleteNote } from "../data/remote/notes-api.js";
 
 class CardList extends HTMLElement {
@@ -28,6 +27,14 @@ class CardList extends HTMLElement {
         this.render()
     }
 
+    // Highlight Search
+    highlightTeks(txt) {
+        if(!txt) return;
+        if(!this.keyword) return txt;
+
+        const regex = new RegExp(`(${this.keyword})`, "gi");
+        return txt.replace(regex, `<span class="highlight">$1</span>`)
+    }
     async render() {
         // Loading Logic
         const getLoading = document.querySelector('loading-app');
@@ -57,8 +64,8 @@ class CardList extends HTMLElement {
             filterNote.forEach((notes) => {
                 notesHtml += `
                 <div class="note">
-                    <h2 class="note-title">${notes.title.substring(0,13)}...</h2>
-                    <h5 class="note-body">${notes.body.substring(0, 95)}...</h5>
+                    <h2 class="note-title">${this.highlightTeks(notes.title)}</h2>
+                    <h5 class="note-body">${this.highlightTeks(notes.body)}</h5>
                     <div class="container-button">
                         <button class="btn-archive">
                             ${notes.archived ? "Unarchive" : "Archive"}
@@ -102,21 +109,26 @@ class CardList extends HTMLElement {
                 color: rgb(117, 117, 117);
                 margin: 0 0;
             }
+
+            .highlight{
+                background-color: rgba(255, 166, 0, 0.499);
+            }
+
             @media only screen and (max-width:1300px) {
                 :host{
                     grid-template-columns: repeat(3, 1fr)
                 }
             }
-                @media only screen and (max-width:1024px) {
-                    :host{
-                        grid-template-columns: repeat(2, 1fr)
-                    }
+            @media only screen and (max-width:1024px) {
+                :host{
+                    grid-template-columns: repeat(2, 1fr)
                 }
-                @media only screen and (max-width:480px) {
-                    :host{
-                        grid-template-columns: 1fr;
-                    }
+            }
+            @media only screen and (max-width:480px) {
+                :host{
+                    grid-template-columns: 1fr;
                 }
+            }
             </style>
             ${notesHtml}
             <popup-app></popup-app>
