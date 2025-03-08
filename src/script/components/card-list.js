@@ -75,8 +75,11 @@ class CardList extends HTMLElement {
                 border-radius: 5px;
             }
             .not-found-data{
-                border:1px solid white;
                 width: 100%;
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: rgb(117, 117, 117);
+                margin: 0 0;
             }
             @media only screen and (max-width:1300px) {
                 :host{
