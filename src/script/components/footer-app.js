@@ -1,24 +1,23 @@
-
 class FooterBar extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode:'open'})
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  static get observedAttribute() {
+    return ["text"];
+  }
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "text") {
+      this.render();
     }
-    static get observedAttribute() {
-        return ['text']
-    }
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'text'){
-            this.render()
-        }
-    }
-    connectedCallback() {
-        this.render()
-    }
-    render() {
-        const text = this.getAttribute('text') || 'Notes App @2025'
+  }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    const text = this.getAttribute("text") || "Notes App @2025";
 
-        this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = `
         <style>
             :host{
                 display: block;
@@ -34,8 +33,7 @@ class FooterBar extends HTMLElement {
             <i>${text}</i>
         </div>
         `;
-    }
-
+  }
 }
 
-customElements.define('footer-bar', FooterBar)
+customElements.define("footer-bar", FooterBar);

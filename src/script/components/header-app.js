@@ -1,14 +1,14 @@
 class navHeader extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({mode:'open'})
-    }
-    connectedCallback() {
-        this.render();
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  connectedCallback() {
+    this.render();
+  }
 
-    render() {
-        this.shadowRoot.innerHTML = `
+  render() {
+    this.shadowRoot.innerHTML = `
             <style>
                 .header{
                     background-color: rgba(255, 255, 255, 0.15);
@@ -26,7 +26,7 @@ class navHeader extends HTMLElement {
                 <h1 class="header-title">Notes App</h1>
             </div>
         `;
-    }
+  }
 }
 
-customElements.define('nav-header', navHeader)
+customElements.define("nav-header", navHeader);

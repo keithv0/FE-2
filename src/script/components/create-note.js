@@ -1,18 +1,18 @@
 import { createNote } from "../data/remote/notes-api.js";
 
-class CreateNote extends HTMLElement{
-    constructor() {
-        super()
-        this.attachShadow({ mode:'open' })
-    }
-    connectedCallback() {
-        this.render();
-        this.setupEventListeners()
-    }
-    render() {
-        console.log('render dipanggil')
-        const template = document.createElement('template');
-        template.innerHTML = `
+class CreateNote extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  connectedCallback() {
+    this.render();
+    this.setupEventListeners();
+  }
+  render() {
+    console.log("render dipanggil");
+    const template = document.createElement("template");
+    template.innerHTML = `
             <style>
                 .notes-input, .submit-notes{
                     box-sizing: border-box;
@@ -37,64 +37,64 @@ class CreateNote extends HTMLElement{
                 <button type="submit" class="submit-notes">Submit</button>
             </form>
         `;
-        this.shadowRoot.innerHTML = '';
-        this.shadowRoot.appendChild(template.content.cloneNode(true))
+    this.shadowRoot.innerHTML = "";
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
+  setupEventListeners() {
+    const form = this.shadowRoot.getElementById("form-create");
+    if (!form) {
+      console.log("Element form-create tidak ditemukan");
+      return;
     }
-    setupEventListeners() {
-        const form = this.shadowRoot.getElementById('form-create')
-        if(!form) {
-            console.log("Element form-create tidak ditemukan")
-            return;
-        }
-        form.addEventListener('submit', this.handleSubmit.bind(this))
+    form.addEventListener("submit", this.handleSubmit.bind(this));
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    // ambil nilai input n textarea
+    const titleInput = this.shadowRoot.querySelector("input-app");
+    if (!titleInput || !titleInput.shadowRoot) {
+      console.log("Element Tidak ditemukan");
+      return;
+    }
+    const titleField = titleInput.shadowRoot.querySelector("#title-note");
+
+    const noteTextarea = this.shadowRoot.querySelector(".notes-input");
+
+    const title = titleField.value.trim();
+    const body = noteTextarea.value.trim();
+
+    // buat objek note baru
+    const newNote = {
+      id: `notes-${Math.random().toString(36).substring(2, 9)}`,
+      title: title,
+      body: body,
+      createdAt: new Date().toISOString(),
+      archived: false,
+    };
+
+    // add note
+    if (title && body) {
+      createNote(newNote.title, newNote.body);
+    } else {
+      alert("Judul dan Body Harus Terisi");
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        
-        // ambil nilai input n textarea
-        const titleInput = this.shadowRoot.querySelector('input-app')
-        if(!titleInput || !titleInput.shadowRoot) {
-            console.log('Element Tidak ditemukan')
-            return;
-        }
-        const titleField = titleInput.shadowRoot.querySelector('#title-note')
+    console.log("Data notes setelah ditambahkan:", createNote());
 
-        const noteTextarea = this.shadowRoot.querySelector('.notes-input')
+    // reset
+    titleField.value = "";
+    noteTextarea.value = "";
 
-        const title = titleField.value.trim()
-        const body = noteTextarea.value.trim()
-
-        // buat objek note baru
-        const newNote = {
-            id:`notes-${Math.random().toString(36).substring(2,9)}`,
-            title: title,
-            body: body,
-            createdAt: new Date().toISOString(),
-            archived: false
-        }
-
-        // add note
-        if(title && body) {
-            createNote(newNote.title, newNote.body)
-        } else {
-            alert("Judul dan Body Harus Terisi");
-        }
-
-        console.log('Data notes setelah ditambahkan:', createNote())
-
-        // reset
-        titleField.value = '';
-        noteTextarea.value = '';
-        
-        document.dispatchEvent(new CustomEvent('note-added', {
-            detail: newNote,
-            bubbles: true,
-            composed: true
-        }))
-    
-    }
-        
+    document.dispatchEvent(
+      new CustomEvent("note-added", {
+        detail: newNote,
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
 }
 
-customElements.define('create-note', CreateNote)
+customElements.define("create-note", CreateNote);

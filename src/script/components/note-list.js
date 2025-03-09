@@ -1,30 +1,32 @@
-import {getNotes} from "../data/data-note.js";
+import { getNotes } from "../data/data-note.js";
 
 class noteList extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
-    }
-    connectedCallback() {
-        this.render();
-        document.addEventListener('note-added', ()=> this.render())
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  connectedCallback() {
+    this.render();
+    document.addEventListener("note-added", () => this.render());
+  }
 
-    render() {
-        const notes = getNotes()
-        console.log("cek di note-list", notes)
+  render() {
+    const notes = getNotes();
+    console.log("cek di note-list", notes);
 
-        const notesHtml  = notes.map((note) => {
-            `
+    const notesHtml = notes
+      .map((note) => {
+        `
                 <div class="note">
                     <h2>${note.title}</h2>
                     <h5>${note.body}</h5>
                     <small>${new Date(note.createdAt).toLocaleString()}</small>
                 </div>
             `;
-        }). join('');
+      })
+      .join("");
 
-        this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = `
             <style>
                 
                 :host {
@@ -45,8 +47,7 @@ class noteList extends HTMLElement {
             </style>
             ${notesHtml}
         `;
-    }
+  }
 }
-
 
 customElements.define("note-list", noteList);

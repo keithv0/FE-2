@@ -1,14 +1,13 @@
-
 class PopupApp extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
-    }
-    connectedCallback() {
-        this.render();
-    }
-    render() {
-        this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    this.shadowRoot.innerHTML = `
         <style>
             .container-modal{
                 display: none;
@@ -59,8 +58,7 @@ class PopupApp extends HTMLElement {
             </div>
         </div>
         `;
-
-    }
+  }
 }
 
-customElements.define("popup-app", PopupApp)
+customElements.define("popup-app", PopupApp);

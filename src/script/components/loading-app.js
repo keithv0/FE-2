@@ -1,13 +1,13 @@
 class LoadingApp extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode:'open' })
-    }
-    connectedCallback() {
-      this.render();
-    }
-    render() {
-      this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+  connectedCallback() {
+    this.render();
+  }
+  render() {
+    this.shadowRoot.innerHTML = `
       <style>
           .container-spin{
               width: 100%;
@@ -77,8 +77,7 @@ class LoadingApp extends HTMLElement {
                </div>
            </div>
           `;
-      }
   }
-  
-  customElements.define("loading-app", LoadingApp);
-  
+}
+
+customElements.define("loading-app", LoadingApp);
