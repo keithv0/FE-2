@@ -56,10 +56,11 @@ class CardList extends HTMLElement {
 
     // Get Attribute Archive From Html
     const isArchive = this.getAttribute("data-archive") === "true";
-    let filterNote = this.notes.filter((note) => note.archived === isArchive);
+    let filterNote =
+     this.notes?.filter((note) => note.archived === isArchive) ?? [];
 
     if (this.keyword) {
-      filterNote = filterNote.filter(
+      filterNote = filterNote?.filter(
         (note) =>
           note.title.toLowerCase().includes(this.keyword) ||
           note.body.toLowerCase().includes(this.keyword),
@@ -91,7 +92,7 @@ class CardList extends HTMLElement {
             :host{
                 padding: 20px;
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(4, minmax(200px, 1fr));
                 gap: 10px;
             }
             .note {
@@ -100,7 +101,7 @@ class CardList extends HTMLElement {
                 padding: 20px;
                 border-radius: 10px;
                 line-height: 1.6rem;
-                
+                overflow-wrap: break-word;
             }
             button{
                 width: 100%;
